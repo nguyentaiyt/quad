@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   windowComplete="init()">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			[Embed(source='assets/icon.png')]
+			private var icon16:Class;
+			[Embed(source='assets/icon.png')]
+			private var icon32:Class;
+			[Embed(source='assets/icon.png')]
+			private var icon48:Class;
+			[Embed(source='assets/icon.png')]
+			private var icon128:Class;
+			
+			private function createTray():void {
+				var shellMenu:NativeMenu = createShellMenu();
+				var icon:InteractiveIcon = NativeApplication.nativeApplication.icon;
+				if ( NativeApplication.supportsDockIcon ) {
+					( icon as DockIcon ).menu = shellMenu;
+				}
+				else
+				{
+					( icon as SystemTrayIcon ).menu = shellMenu;
+					( icon as SystemTrayIcon ).tooltip = "My App" ;
+				}
+				var bitmaps:Array = [new icon16(), new icon32(), new icon48(), new icon128()];
+				icon.bitmaps = bitmaps;
+			}
+			
+			private function createShellMenu():NativeMenu {
+				var menu:NativeMenu = new NativeMenu();
+				var quitCmd:NativeMenuItem = new NativeMenuItem( "Quit");
+				quitCmd.addEventListener(Event.SELECT,quitHandler );
+				menu.addItem( quitCmd );
+				return menu;
+			}
+			private function quitHandler( evt:Event ):void {
+				NativeApplication.nativeApplication.exit();
+			}
+		]]>
+	</fx:Script>
+</s:WindowedApplication>
